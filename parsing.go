@@ -242,6 +242,7 @@ func (p *Parser) parseFrame() bool {
 	// Queue up some post processing
 	p.msgQueue <- frameParsedToken
 
+	p.bitReaderPrevPos = p.bitReader.ActualPosition()
 	return true
 }
 

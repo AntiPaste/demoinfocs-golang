@@ -44,6 +44,7 @@ type Parser struct {
 	// Important fields
 
 	bitReader                    *bit.BitReader
+	bitReaderPrevPos             int
 	stParser                     *st.SendTableParser
 	additionalNetMessageCreators map[int]NetMessageCreator // Map of net-message-IDs to NetMessageCreators (for parsing custom net-messages)
 	msgQueue                     chan interface{}          // Queue of net-messages
@@ -178,6 +179,10 @@ func (p *Parser) RegisterNetMessageHandler(handler interface{}) dp.HandlerIdenti
 // The identifier is returned at registration by RegisterNetMessageHandler().
 func (p *Parser) UnregisterNetMessageHandler(identifier dp.HandlerIdentifier) {
 	p.msgDispatcher.UnregisterHandler(identifier)
+}
+
+func (p *Parser) LastSuccessfulFramePosition() int {
+	return p.bitReaderPrevPos
 }
 
 func (p *Parser) error() (err error) {
